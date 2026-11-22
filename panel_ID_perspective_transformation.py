@@ -14,8 +14,8 @@ OUTPUT_HEIGHT = 733
 # Marker IDs assigned to each corner
 TOP_LEFT_ID = 0
 TOP_RIGHT_ID = 1
-BOTTOM_RIGHT_ID = 2
-BOTTOM_LEFT_ID = 3
+BOTTOM_RIGHT_ID = 3
+BOTTOM_LEFT_ID = 2
 
 
 # ArUco setup

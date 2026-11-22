@@ -2,12 +2,14 @@ import cv2
 
 from Indicator import detect_all_indicators, find_indicator_rois
 from panel_ID_perspective_transformation import CAMERA_INDEX, get_panel_aoi
+from gauge_reader import draw_gauges, read_all_gauges
 
 
 def main():
     camera = cv2.VideoCapture(CAMERA_INDEX)
     indicator_rois = None
     # previous_states = None
+    previous_pressures = None
 
     try:
         if not camera.isOpened():
@@ -24,8 +26,16 @@ def main():
             if panel is None:
                 cv2.imshow("Gauge Master", frame)
                 # previous_states = None
+                previous_pressures = None
             else:
-                cv2.imshow("Gauge Master", panel)
+                gauges = read_all_gauges(panel)
+                pressures = {
+                    name: round(gauge["pressure"], 1)
+                    for name, gauge in gauges.items()
+                    if gauge["pressure"] is not None
+                }
+                cv2.imshow("Gauge Master", draw_gauges(panel, gauges))
+                
 
                 # Find the four light boxes once and reuse them.
                 if indicator_rois is None:
@@ -44,7 +54,11 @@ def main():
                     #     print(states)
                     #     previous_states = states
 
-                # Your teammate's gauge reader will take `panel` here.
+                if pressures != previous_pressures:
+                    print(pressures)
+                    previous_pressures = pressures
+
+                # gauge reader will take `panel` here.
 
             if (cv2.waitKey(1) & 0xFF) in (ord("q"), 27):
                 break

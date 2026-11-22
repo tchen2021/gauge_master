@@ -20,8 +20,8 @@ and each light reports ON/OFF (light-1, light-2, ...).
 
 Usage:
   python gauge_reader.py --list-cameras
-  python gauge_reader.py --calibrate --min 0 --max 100 --unit PSI
-  python gauge_reader.py --source 1 --calibrate --gauges 2 --lights 4 --min 0 --max 100
+  python gauge_reader.py --calibrate --min 0 --max 60 --unit PSI
+  python gauge_reader.py --source 1 --calibrate --gauges 2 --lights 4 --min 0 --max 60
   python gauge_reader.py --source 1 --log readings.jsonl
   python gauge_reader.py --needle-color red --log readings.jsonl
 
@@ -576,7 +576,7 @@ def main() -> None:
     try:
         if args.calibrate:
             if args.min is None or args.max is None:
-                sys.exit("--calibrate needs --min and --max, e.g. --min 0 --max 100")
+                sys.exit("--calibrate needs --min and --max, e.g. --min 0 --max 60")
             board = run_board_calibration(source, args.gauges, args.lights,
                                           [(args.min, args.max, args.unit)])
             if board is None:
@@ -587,7 +587,7 @@ def main() -> None:
                   f"light(s) to {args.config}", file=sys.stderr)
         elif not args.config.exists():
             sys.exit(f"No {args.config} yet. Run first, e.g.:\n"
-                     "  python gauge_reader.py --calibrate --gauges 2 --lights 4 --min 0 --max 100")
+                     "  python gauge_reader.py --calibrate --gauges 2 --lights 4 --min 0 --max 60")
         else:
             gauges, lights = load_board(args.config, args.gauge_id)
 

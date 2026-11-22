@@ -6,7 +6,7 @@ number of gauges and indicator lights.
   python make_dashboard.py                                  # 2 gauges, 4 lights
   python make_dashboard.py --gauges gauge-1,gauge-2 --lights light-1,light-2,light-3,light-4
   python make_dashboard.py --light-names "light-1=Pump fault,light-2=Overheat"
-  python make_dashboard.py --warn 50 --alarm 60 --min 0 --max 100
+  python make_dashboard.py --warn 25 --alarm 30 --min 0 --max 60
 
 Write it straight into Grafana's folder (Grafana reloads it within ~10 s):
   python make_dashboard.py --out dashboard/grafana/dashboards/gauge_monitor.json
@@ -206,10 +206,10 @@ def main() -> None:
     ap.add_argument("--gauges", default="gauge-1,gauge-2")
     ap.add_argument("--lights", default="light-1,light-2,light-3,light-4")
     ap.add_argument("--light-names", default="", help='e.g. "light-1=Pump fault,light-2=Overheat"')
-    ap.add_argument("--warn", type=float, default=50)
-    ap.add_argument("--alarm", type=float, default=60)
+    ap.add_argument("--warn", type=float, default=25)
+    ap.add_argument("--alarm", type=float, default=30)
     ap.add_argument("--min", type=float, default=0)
-    ap.add_argument("--max", type=float, default=100)
+    ap.add_argument("--max", type=float, default=60)
     ap.add_argument("--jira-site", default="https://sjgggggg.atlassian.net")
     ap.add_argument("--out", default="gauge_monitor.json")
     a = ap.parse_args()

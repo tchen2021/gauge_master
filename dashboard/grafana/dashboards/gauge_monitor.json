@@ -52,7 +52,7 @@
         "x": 0,
         "y": 1
       },
-      "description": "WARNING at 50+, HIGH PRESSURE ALARM at 60+.",
+      "description": "WARNING at 25+, HIGH PRESSURE ALARM at 30+.",
       "fieldConfig": {
         "defaults": {
           "unit": "pressurepsi",
@@ -75,7 +75,7 @@
             {
               "type": "range",
               "options": {
-                "from": 60,
+                "from": 30,
                 "to": 1000000000.0,
                 "result": {
                   "text": "HIGH PRESSURE ALARM",
@@ -87,8 +87,8 @@
             {
               "type": "range",
               "options": {
-                "from": 50,
-                "to": 60,
+                "from": 25,
+                "to": 30,
                 "result": {
                   "text": "WARNING",
                   "color": "yellow",
@@ -100,7 +100,7 @@
               "type": "range",
               "options": {
                 "from": -1000000000.0,
-                "to": 50,
+                "to": 25,
                 "result": {
                   "text": "NORMAL",
                   "color": "green",
@@ -155,7 +155,7 @@
         "defaults": {
           "unit": "pressurepsi",
           "min": 0,
-          "max": 100,
+          "max": 60,
           "decimals": 1,
           "thresholds": {
             "mode": "absolute",
@@ -166,11 +166,11 @@
               },
               {
                 "color": "yellow",
-                "value": 50
+                "value": 25
               },
               {
                 "color": "red",
-                "value": 60
+                "value": 30
               }
             ]
           },
@@ -222,7 +222,7 @@
         "defaults": {
           "unit": "pressurepsi",
           "min": 0,
-          "max": 100,
+          "max": 60,
           "decimals": 1,
           "thresholds": {
             "mode": "absolute",
@@ -233,11 +233,11 @@
               },
               {
                 "color": "yellow",
-                "value": 50
+                "value": 25
               },
               {
                 "color": "red",
-                "value": 60
+                "value": 30
               }
             ]
           },
@@ -439,7 +439,7 @@
         "x": 12,
         "y": 1
       },
-      "description": "WARNING at 50+, HIGH PRESSURE ALARM at 60+.",
+      "description": "WARNING at 25+, HIGH PRESSURE ALARM at 30+.",
       "fieldConfig": {
         "defaults": {
           "unit": "pressurepsi",
@@ -462,7 +462,7 @@
             {
               "type": "range",
               "options": {
-                "from": 60,
+                "from": 30,
                 "to": 1000000000.0,
                 "result": {
                   "text": "HIGH PRESSURE ALARM",
@@ -474,8 +474,8 @@
             {
               "type": "range",
               "options": {
-                "from": 50,
-                "to": 60,
+                "from": 25,
+                "to": 30,
                 "result": {
                   "text": "WARNING",
                   "color": "yellow",
@@ -487,7 +487,7 @@
               "type": "range",
               "options": {
                 "from": -1000000000.0,
-                "to": 50,
+                "to": 25,
                 "result": {
                   "text": "NORMAL",
                   "color": "green",
@@ -542,7 +542,7 @@
         "defaults": {
           "unit": "pressurepsi",
           "min": 0,
-          "max": 100,
+          "max": 60,
           "decimals": 1,
           "thresholds": {
             "mode": "absolute",
@@ -553,11 +553,11 @@
               },
               {
                 "color": "yellow",
-                "value": 50
+                "value": 25
               },
               {
                 "color": "red",
-                "value": 60
+                "value": 30
               }
             ]
           },
@@ -609,7 +609,7 @@
         "defaults": {
           "unit": "pressurepsi",
           "min": 0,
-          "max": 100,
+          "max": 60,
           "decimals": 1,
           "thresholds": {
             "mode": "absolute",
@@ -620,11 +620,11 @@
               },
               {
                 "color": "yellow",
-                "value": 50
+                "value": 25
               },
               {
                 "color": "red",
-                "value": 60
+                "value": 30
               }
             ]
           },

@@ -5,7 +5,7 @@ alert_monitor.py - Step 2 of the gauge monitoring system.
 Reads the JSON readings printed by gauge_reader.py and opens a Jira ticket when
 a gauge stays outside its limit. Run both together with a pipe:
 
-  python gauge_reader.py --source 1 --log readings.jsonl | python alert_monitor.py --high 80
+  python gauge_reader.py --source 1 --log readings.jsonl | python alert_monitor.py --high 30
 
 Alert rules:
   * HOLD:  the value must stay past the limit for --hold seconds (default 5),
@@ -485,7 +485,8 @@ def make_ticketer(dry_run: bool) -> Ticketer:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Open Jira tickets from gauge readings.")
-    ap.add_argument("--high", type=float, help="alert when the value reaches this or above")
+    ap.add_argument("--high", type=float, default=30.0,
+                    help="alert when the value reaches this or above (default 30)")
     ap.add_argument("--low", type=float, help="alert when the value reaches this or below")
     ap.add_argument("--hold", type=float, default=5.0,
                     help="seconds the value must stay out of limit (default 5)")
@@ -526,7 +527,7 @@ def main() -> None:
         return
 
     if args.high is None and args.low is None:
-        sys.exit("Set at least one limit, e.g. --high 80")
+        sys.exit("Set at least one limit, e.g. --high 30")
 
     ticketer = make_ticketer(args.dry_run)
     tracker = None

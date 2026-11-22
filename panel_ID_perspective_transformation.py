@@ -5,7 +5,7 @@ import numpy as np
 
 # Settings
 
-CAMERA_INDEX = 0
+CAMERA_INDEX = 1
 
 # Rectified ROI size based on the 15 in by 11 in marker-center rectangle.
 OUTPUT_WIDTH = 1000

@@ -7,7 +7,7 @@ from panel_ID_perspective_transformation import CAMERA_INDEX, get_panel_aoi
 def main():
     camera = cv2.VideoCapture(CAMERA_INDEX)
     indicator_rois = None
-    previous_states = None
+    # previous_states = None
 
     try:
         if not camera.isOpened():
@@ -23,7 +23,7 @@ def main():
 
             if panel is None:
                 cv2.imshow("Gauge Master", frame)
-                previous_states = None
+                # previous_states = None
             else:
                 cv2.imshow("Gauge Master", panel)
 
@@ -40,9 +40,9 @@ def main():
                         name: reading["status"]
                         for name, reading in readings.items()
                     }
-                    if states != previous_states:
-                        print(states)
-                        previous_states = states
+                    # if states != previous_states:
+                    #     print(states)
+                    #     previous_states = states
 
                 # Your teammate's gauge reader will take `panel` here.
 

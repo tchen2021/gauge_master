@@ -5,8 +5,8 @@ import numpy as np
 # 1. Define thresholds for HSV
 # -----------------------------------
 
-# Threshold of the brightness difference shall be at least 50
-VALUE_THRESHOLD = 50                                        
+# Threshold of the brightness difference shall be at least 70
+VALUE_THRESHOLD = 30                                        
 
 # -----------------------------------
 # 2. Find indicator ROIs including surrounding background
@@ -150,22 +150,47 @@ def detect_indicator(frame, indicator_roi):
 # 4. Detect all indicators
 # -----------------------------------
 
-# Create a function to detect the status of all indicators in the frame based on their ROIs
+# Store previous indicator readings
+previous_results = {}
+
+# Create a function to detect all indicators
 def detect_all_indicators(frame, indicator_rois):
 
-    # Create a dictionary to store the results for each indicator
+    global previous_results
+
+    # Create a dictionary to store current results
     results = {}
 
-    # Loop through each indicator ROI and detect its status
+    # Loop through each indicator ROI
     for i, indicator_roi in enumerate(indicator_rois):
 
         # Detect indicator status and brightness difference
         status, difference_v = detect_indicator(frame, indicator_roi)
 
-        # Store the results in the dictionary with a key for each indicator
-        results[f"Indicator_{i+1}"] = {
+        # Get indicator name
+        indicator_name = f"Indicator_{i+1}"
+
+        # Store current readings
+        results[indicator_name] = {
             "status": status,
             "difference_v": difference_v
         }
 
+        # Get previous status
+        previous_status = previous_results.get(
+            indicator_name, {}
+        ).get("status")
+
+        # Print only when indicator status changes
+        if status != previous_status:
+            print(
+                f"{indicator_name}: "
+                f"Status = {status}, "
+                f"Difference V = {difference_v:.1f}"
+            )
+
+    # Save current readings for comparison with next frame
+    previous_results = results
+
+    # Return current readings
     return results

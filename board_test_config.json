@@ -1,0 +1,86 @@
+{
+  "gauges": [
+    {
+      "id": "gauge-1",
+      "center": [
+        330,
+        300
+      ],
+      "start": [
+        209,
+        420
+      ],
+      "mid": [
+        329,
+        130
+      ],
+      "end": [
+        450,
+        420
+      ],
+      "min_value": 0.0,
+      "max_value": 100.0,
+      "unit": "PSI"
+    },
+    {
+      "id": "gauge-2",
+      "center": [
+        950,
+        300
+      ],
+      "start": [
+        829,
+        420
+      ],
+      "mid": [
+        950,
+        130
+      ],
+      "end": [
+        1070,
+        420
+      ],
+      "min_value": 0.0,
+      "max_value": 100.0,
+      "unit": "PSI"
+    }
+  ],
+  "lights": [
+    {
+      "id": "light-1",
+      "center": [
+        340,
+        625
+      ],
+      "radius": 28.0,
+      "threshold": 0.35
+    },
+    {
+      "id": "light-2",
+      "center": [
+        540,
+        625
+      ],
+      "radius": 28.0,
+      "threshold": 0.35
+    },
+    {
+      "id": "light-3",
+      "center": [
+        740,
+        625
+      ],
+      "radius": 28.0,
+      "threshold": 0.35
+    },
+    {
+      "id": "light-4",
+      "center": [
+        940,
+        625
+      ],
+      "radius": 28.0,
+      "threshold": 0.35
+    }
+  ]
+}

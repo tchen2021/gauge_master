@@ -1,0 +1,48 @@
+# Gauge monitoring dashboard: InfluxDB (stores readings) + Grafana (shows them).
+# Start:  docker compose up -d      Stop:  docker compose down
+# Grafana: http://localhost:3000  (admin / gauge-admin-pass)
+# InfluxDB: http://localhost:8086 (admin / gauge-admin-pass)
+#
+# These passwords and the token are for local development only.
+# Change them before putting this on a shared network.
+
+services:
+  influxdb:
+    image: influxdb:2.7
+    ports:
+      - "127.0.0.1:8086:8086"
+    environment:
+      DOCKER_INFLUXDB_INIT_MODE: setup
+      DOCKER_INFLUXDB_INIT_USERNAME: admin
+      DOCKER_INFLUXDB_INIT_PASSWORD: gauge-admin-pass
+      DOCKER_INFLUXDB_INIT_ORG: gauge-lab
+      DOCKER_INFLUXDB_INIT_BUCKET: gauges
+      DOCKER_INFLUXDB_INIT_RETENTION: 30d
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: gauge-dev-token-change-me
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:12.4.0
+    depends_on:
+      - influxdb
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: gauge-admin-pass
+      GF_DASHBOARDS_MIN_REFRESH_INTERVAL: 1s
+      # Operators can view the dashboard without logging in (read-only).
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /etc/grafana/dashboards/gauge_monitor.json
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/etc/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+
+volumes:
+  influxdb-data:
+  grafana-data:

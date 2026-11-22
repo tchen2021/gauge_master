@@ -1,0 +1,22 @@
+{
+  "gauge-2:high": {
+    "gauge_id": "gauge-2",
+    "kind": "high",
+    "started": "2026-11-22T14:26:47.476+00:00",
+    "started_ts": 1795357607.476,
+    "peak": 70.07,
+    "unit": "PSI",
+    "ticket": "GAUGE-82",
+    "last_attempt": 1795357608.585
+  },
+  "gauge-1:high": {
+    "gauge_id": "gauge-1",
+    "kind": "high",
+    "started": "2026-11-22T14:26:57.662+00:00",
+    "started_ts": 1795357617.662,
+    "peak": 64.88,
+    "unit": "PSI",
+    "ticket": "GAUGE-83",
+    "last_attempt": 1795357618.674
+  }
+}

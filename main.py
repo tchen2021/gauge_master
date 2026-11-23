@@ -1,4 +1,5 @@
 import cv2
+# from networkx import display
 
 from Indicator import detect_all_indicators, find_indicator_rois
 from panel_ID_perspective_transformation import CAMERA_INDEX, get_panel_aoi
@@ -28,13 +29,12 @@ def main():
                 # previous_states = None
                 previous_pressures = None
             else:
-                gauges = read_all_gauges(panel)
+                gauges = read_all_gauges(panel.copy())
                 pressures = {
                     name: round(gauge["pressure"], 1)
                     for name, gauge in gauges.items()
                     if gauge["pressure"] is not None
                 }
-                cv2.imshow("Gauge Master", draw_gauges(panel, gauges))
                 
 
                 # Find the four light boxes once and reuse them.
@@ -53,6 +53,35 @@ def main():
                     # if states != previous_states:
                     #     print(states)
                     #     previous_states = states
+
+                # Create a separate image for visualization
+                display = draw_gauges(panel.copy(), gauges)
+
+                # Draw indicator ROIs
+                if indicator_rois is not None:
+                    for i, (roi, indicator_box) in enumerate(indicator_rois):
+
+                        x1, y1, rw, rh = roi
+                        x, y, w, h = indicator_box
+
+                        # Draw expanded ROI (blue)
+                        cv2.rectangle(display, (x1, y1),
+                                    (x1+rw, y1+rh), (255, 0, 0), 2)
+
+                        # Draw indicator rectangle (green)
+                        cv2.rectangle(display, (x, y),
+                                    (x+w, y+h), (0, 255, 0), 2)
+
+                        # Draw indicator name
+                        cv2.putText(display, f"Indicator_{i+1}",
+                                    (x1, y1-10),
+                                    cv2.FONT_HERSHEY_SIMPLEX,
+                                    0.5, (0, 255, 255), 1)
+
+                # Display the annotated image
+                cv2.imshow("Gauge Master", display)
+
+
 
                 if pressures != previous_pressures:
                     print(pressures)

@@ -6,7 +6,7 @@ import numpy as np
 # -----------------------------------
 
 # Threshold of the brightness difference shall be at least 70
-VALUE_THRESHOLD = 30                                        
+VALUE_THRESHOLD = 80                                        
 
 # -----------------------------------
 # 2. Find indicator ROIs including surrounding background
@@ -19,12 +19,12 @@ def find_indicator_rois(frame):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)            
 
     # Define red color range in HSV
-    # The first red range is [0, 70, 40] to [10, 255, 255]
-    lower_red1 = np.array([0, 70, 40])
+    # The first red range is [0, 70, 100] to [10, 255, 255]
+    lower_red1 = np.array([0, 70, 120])
     upper_red1 = np.array([10, 255, 255])
 
-    # The second red range is [170, 70, 40] to [179, 255, 255]
-    lower_red2 = np.array([170, 70, 40])
+    # The second red range is [170, 70, 100] to [179, 255, 255]
+    lower_red2 = np.array([170, 70, 120])
     upper_red2 = np.array([179, 255, 255])
 
     # Create masks to detect red regions in the image
@@ -32,12 +32,26 @@ def find_indicator_rois(frame):
     mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
 
     # Combine the two masks to get the final red mask
-    red_mask = mask1 | mask2
+    # Detect very bright pixels from illuminated LEDs
+    bright_mask = cv2.inRange(
+        hsv,
+        np.array([0, 0, 200]),
+        np.array([179, 255, 255])
+    )
+
+    # Combine red regions and bright regions
+    red_mask = mask1 | mask2 | bright_mask
+
+    # Restrict indicator detection to the bottom 30% of the panel
+    height, width = frame.shape[:2]
+    red_mask[:int(0.70 * height), :] = 0
+    red_mask[int(0.90 * height):, :] = 0
+    cv2.imshow("Indicator Mask", red_mask)
 
     # Remove noise and fill gaps in the red mask using morphological operations
-    kernel = np.ones((3, 3), np.uint8)
-    red_mask = cv2.morphologyEx(red_mask, cv2.MORPH_OPEN, kernel)
+    kernel = np.ones((5, 5), np.uint8)
     red_mask = cv2.morphologyEx(red_mask, cv2.MORPH_CLOSE, kernel)
+    red_mask = cv2.morphologyEx(red_mask, cv2.MORPH_OPEN, kernel)
 
     # Find contours of the red regions in the mask
     contours, _ = cv2.findContours(red_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -50,7 +64,7 @@ def find_indicator_rois(frame):
         area = cv2.contourArea(contour)
         
         # If the area is too small, skip this contour
-        if area < 50:
+        if area < 200:
             continue
         
         # If the perimeter is zero, skip this contour
@@ -62,7 +76,7 @@ def find_indicator_rois(frame):
         circularity = 4 * np.pi * area / perimeter**2
         
         # If the circularity is less than 0.65, skip this contour
-        if circularity < 0.65:
+        if circularity < 0.50:
             continue
         
         # Calculate the smallest bounding rectangle for the contour

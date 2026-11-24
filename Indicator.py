@@ -5,7 +5,7 @@ import numpy as np
 # 1. Define thresholds for HSV
 # -----------------------------------
 
-# Threshold of the brightness difference shall be at least 70
+# Threshold of the brightness difference shall be at least 80
 VALUE_THRESHOLD = 80                                        
 
 # -----------------------------------
@@ -19,11 +19,11 @@ def find_indicator_rois(frame):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)            
 
     # Define red color range in HSV
-    # The first red range is [0, 70, 100] to [10, 255, 255]
+    # The first red range is [0, 70, 120] to [10, 255, 255]
     lower_red1 = np.array([0, 70, 120])
     upper_red1 = np.array([10, 255, 255])
 
-    # The second red range is [170, 70, 100] to [179, 255, 255]
+    # The second red range is [170, 70, 120] to [179, 255, 255]
     lower_red2 = np.array([170, 70, 120])
     upper_red2 = np.array([179, 255, 255])
 
@@ -32,7 +32,7 @@ def find_indicator_rois(frame):
     mask2 = cv2.inRange(hsv, lower_red2, upper_red2)
 
     # Combine the two masks to get the final red mask
-    # Detect very bright pixels from illuminated LEDs
+    # Detect very bright pixels from illuminated indicators
     bright_mask = cv2.inRange(
         hsv,
         np.array([0, 0, 200]),
@@ -42,11 +42,11 @@ def find_indicator_rois(frame):
     # Combine red regions and bright regions
     red_mask = mask1 | mask2 | bright_mask
 
-    # Restrict indicator detection to the bottom 30% of the panel
+    # Restrict indicator detection to within the bottom 10%-30% of the panel
     height, width = frame.shape[:2]
     red_mask[:int(0.70 * height), :] = 0
     red_mask[int(0.90 * height):, :] = 0
-    cv2.imshow("Indicator Mask", red_mask)
+    # cv2.imshow("Indicator Mask", red_mask)
 
     # Remove noise and fill gaps in the red mask using morphological operations
     kernel = np.ones((5, 5), np.uint8)
@@ -75,7 +75,7 @@ def find_indicator_rois(frame):
         # Calculate circularity of the contour to filter out non-circular shapes
         circularity = 4 * np.pi * area / perimeter**2
         
-        # If the circularity is less than 0.65, skip this contour
+        # If the circularity is less than 0.50, skip this contour
         if circularity < 0.50:
             continue
         
